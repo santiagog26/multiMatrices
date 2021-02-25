@@ -1,5 +1,5 @@
 GCC = gcc
-FLAGS = -std=c99 -pedantic -Wall
+FLAGS = -std=c99 -pedantic -Wall -pthread
 
 CFLAGS = -lm
 
