@@ -1,6 +1,6 @@
 /**
  * File: modulo.c
- * Description: Functions for matrix (N*N) multiplication with multiple threads and paralel programming
+ * Description: Functions for matrix (N*N) multiplication with multiple threads and parallel programming
  * Author: Shuo Yang
  * Modified: Juan Bueno and Santiago Gutiérrez
  * Date: 15 - Feb - 2021
