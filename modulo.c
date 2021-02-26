@@ -26,63 +26,61 @@ void sample_stop()
 /* Presentación de toma de tiempo */
 void sample_end()
 {
-	printf("%ld ms\n", ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec)));
+	double exectime;
+	exectime = (end.tv_sec - start.tv_sec) * 1000.0; // sec to ms
+  	exectime += (end.tv_usec - start.tv_usec) / 1000.0; // us to ms
+	printf("Time: %f ms\n", exectime);
 }
 
-/* Inicializador aleatorio de matrices */
-void initRandomMatriz(int random, int size, double **matriz)
+/* Inicializador de matrices */
+void init_matrix( double **matrix, int size )
 {
-	int i, j;
+  int i, j;
 
-	for (i = 0; i < size; i++)
-	{
-		for (j = 0; j < size; j++)
-		{
-			matriz[i][j] = rand() % random;
-		}
-	}
+  for (i = 0; i < size; ++i) {
+    for (j = 0; j < size; ++j) {
+      matrix[ i ][ j ] = 1.0;
+    }
+  }
 }
 
-/* Estructura para guardar datos necesarios para la multiplicaión */
-typedef struct thread_args{
-	double **matrix1;
-    double **matrix2;
-    double **matrix3;
-    int size, num_threads;
-    int *tid;
-} args;
+/* Imprime la matriz */ 
+void print_matrix( double **matrix, int size )
+{
+  int i, j;
+
+  for (i = 0; i < size; ++i) {
+    for (j = 0; j < size-1; ++j) {
+      printf( "%lf, ", matrix[ i ][ j ] );
+    }
+    printf( "%lf", matrix[ i ][ j ] );
+    putchar( '\n' );
+  }
+}
 
 /* Multiplicacion de dos matrices y guardar resultado en otro */
-void * multiMatriz(struct thread_args *argsm)
+void * worker( void *arg )
 {
-	int i, j, k, tid, size, num_threads, portion_size, row_start, row_end;
-	double sum;
-	double **matrix1, **matrix2, **matrix3;
+  int i, j, k, tid, portion_size, row_start, row_end;
+  double sum=0;
+  
+  tid = *(int *)(arg); // get the thread ID assigned sequentially.
+  portion_size = size / num_threads;
+  row_start = tid * portion_size;
+  row_end = (tid+1) * portion_size;
 
-	tid = *(int *)(argsm->tid);
-	size = argsm->size;
-	num_threads = argsm->num_threads;
-	matrix1 = argsm->matrix1;
-    matrix2 = argsm->matrix2;
-    matrix3 = argsm->matrix3;
-	portion_size = size / num_threads;
-	row_start = tid * portion_size;
-	row_end = (tid + 1) * portion_size;
-
-	for (i = row_start; i < row_end; ++i)
-	{ // hold row index of 'matrix1'
-		for (j = 0; j < size; ++j)
-		{			 // hold column index of 'matrix2'
-			sum = 0; // hold value of a cell
-			/* one pass to sum the multiplications of corresponding cells
-	 		in the row vector and column vector. */
-			for (k = 0; k < size; ++k)
-			{
-				sum += matrix1[i][k] * matrix2[k][j];
-			}
-			matrix3[i][j] = sum;
-		}
-	}
+  for (i = row_start; i < row_end; ++i) { // hold row index of 'matrix1'
+    for (j = 0; j < size; ++j) { // hold column index of 'matrix2'
+      sum = 0; // hold value of a cell
+      /* one pass to sum the multiplications of corresponding cells
+	 in the row vector and column vector. */
+      for (k = 0; k < size; ++k) { 
+        sum += matrix1[ i ][ k ] * matrix2[ k ][ j ];
+      }
+      matrix3[ i ][ j ] = sum;
+    }
+  }
+  return NULL;
 }
 
 /* Asignar dirección de memoria a las matrices */
