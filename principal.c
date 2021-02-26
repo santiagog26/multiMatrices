@@ -1,15 +1,15 @@
 /**
- * Matrix (N*N) multiplication with multiple threads.
- * author: Shuo Yang
+ * File: principal.c
+ * Description: Matrix (N*N) multiplication with multiple threads and paralel programming
+ * Author: Shuo Yang
+ * Modified: Juan Bueno and Santiago Gutiérrez
+ * Date: 15 - Feb - 2021
  */
 #include "modulo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
 #include <pthread.h>
-
-int size, num_threads;
-double **matrix1, **matrix2, **matrix3;
 
 int main( int argc, char *argv[] )
 {

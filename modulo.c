@@ -1,8 +1,10 @@
-/* Fecha: 11 - Feb 2021
- * Autor: Santiago Gutierrez Orjuela
- * Asignatura: Computación paralela y distribuida
- * Asunto: Programa compilación por separado Modulo de inicialización aleatoria de matrices y multiplicadas
- * */
+/**
+ * File: modulo.c
+ * Description: Functions for matrix (N*N) multiplication with multiple threads and paralel programming
+ * Author: Shuo Yang
+ * Modified: Juan Bueno and Santiago Gutiérrez
+ * Date: 15 - Feb - 2021
+ */
 
 #include "modulo.h"
 #include <sys/time.h>
